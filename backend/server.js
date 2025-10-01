@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { serverErrorHandler } from './middleware/serverErrorHandler.js';
 
 if (process.env.NODE_ENV !== 'production') {
   dotenv.config();
@@ -20,6 +21,7 @@ let tasks = [
   {
     id: ++id,
     title: 'Complete project proposal document',
+    description: 'Write and finalize the project proposal',
     priority: 3,
     completed: false,
     category: 'work',
@@ -29,6 +31,7 @@ let tasks = [
   {
     id: ++id,
     title: 'Buy groceries for the week',
+    description: 'Get food and household supplies',
     priority: 2,
     completed: false,
     category: 'personal',
@@ -38,6 +41,7 @@ let tasks = [
   {
     id: ++id,
     title: '30-minute morning run',
+    description: 'Daily exercise for fitness',
     priority: 4,
     completed: false,
     category: 'health',
@@ -47,6 +51,7 @@ let tasks = [
   {
     id: ++id,
     title: 'Read Next documentation updates',
+    description: 'Study latest framework changes',
     priority: 3,
     completed: false,
     category: 'learning',
@@ -56,6 +61,7 @@ let tasks = [
   {
     id: ++id,
     title: 'Plan weekend trip',
+    description: 'Organize travel and activities',
     priority: 1,
     completed: false,
     category: 'recreation',
@@ -66,16 +72,17 @@ let tasks = [
 
 app.get('/', (req, res) => res.send('server is working'));
 
-app.get('/tasks', errorHandler, (req, res) => {
+app.get('/tasks', serverErrorHandler, (req, res) => {
   res.json(tasks);
 });
 
-app.post('/tasks', errorHandler, (req, res) => {
-  const { title, priority, category, dueDate } = req.body;
+app.post('/tasks', serverErrorHandler, (req, res) => {
+  const { title, description, priority, category, dueDate } = req.body;
 
   const newTask = {
     id: ++id,
     title,
+    description,
     priority,
     category,
     dueDate,
@@ -86,7 +93,7 @@ app.post('/tasks', errorHandler, (req, res) => {
   res.status(201).json(tasks);
 });
 
-app.patch('/tasks/:id', errorHandler, (req, res) => {
+app.patch('/tasks/:id', serverErrorHandler, (req, res) => {
   const { id } = req.params;
   const { completed } = req.body;
 
@@ -96,7 +103,7 @@ app.patch('/tasks/:id', errorHandler, (req, res) => {
   res.json(tasks);
 });
 
-app.delete('/tasks/:id', errorHandler, (req, res) => {
+app.delete('/tasks/:id', serverErrorHandler, (req, res) => {
   const { id } = req.params;
 
   tasks = tasks.filter((task) => task.id !== Number(id));

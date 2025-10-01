@@ -1,10 +1,10 @@
-const errorHandler = (req, res, next) => {
+export function serverErrorHandler(req, res, next) {
   try {
     next();
   } catch (err) {
     handleError(err, res);
   }
-};
+}
 
 function handleError(err, res) {
   console.error(err);
