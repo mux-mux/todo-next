@@ -22,13 +22,20 @@ export default function TaskList({
 }) {
   const [tasks, setTasks] = useState<TasksProps[]>(() => initialTasks);
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | 'none'>('none');
 
-  const filteredTasks = tasks.filter(
-    (task) =>
-      filterStatus === 'all' ||
-      (filterStatus === 'done' && task.done) ||
-      (filterStatus === 'undone' && !task.done)
-  );
+  const filteredTasks = tasks
+    .filter(
+      (task) =>
+        filterStatus === 'all' ||
+        (filterStatus === 'done' && task.done) ||
+        (filterStatus === 'undone' && !task.done)
+    )
+    .sort((a, b) => {
+      if (sortOrder === 'asc') return a.priority - b.priority;
+      if (sortOrder === 'desc') return b.priority - a.priority;
+      return 0;
+    });
 
   const getPriorityColor = (priority: number) => {
     if (priority <= 3) return 'bg-green-100 text-green-800';
@@ -73,6 +80,22 @@ export default function TaskList({
               <SelectItem value="all">All Tasks</SelectItem>
               <SelectItem value="undone">Undone</SelectItem>
               <SelectItem value="done">Done</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select
+            value={sortOrder}
+            onValueChange={(value: 'asc' | 'desc' | 'none') =>
+              setSortOrder(value)
+            }
+          >
+            <SelectTrigger className="w-[140px]">
+              <SelectValue placeholder="Sort by priority" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="desc">High to Low</SelectItem>
+              <SelectItem value="asc">Low to High</SelectItem>
+              <SelectItem value="none">None</SelectItem>
             </SelectContent>
           </Select>
         </div>
