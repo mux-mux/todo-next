@@ -23,7 +23,7 @@ let tasks = [
     title: 'Complete project proposal document',
     description: 'Write and finalize the project proposal',
     priority: 3,
-    completed: false,
+    done: false,
     category: 'work',
     dueDate: '2025-10-05',
     createdAt: '2025-09-30 09:00',
@@ -33,7 +33,7 @@ let tasks = [
     title: 'Buy groceries for the week',
     description: 'Get food and household supplies',
     priority: 2,
-    completed: false,
+    done: false,
     category: 'personal',
     dueDate: '2025-10-02',
     createdAt: '2025-09-30 18:30',
@@ -43,7 +43,7 @@ let tasks = [
     title: '30-minute morning run',
     description: 'Daily exercise for fitness',
     priority: 4,
-    completed: false,
+    done: false,
     category: 'health',
     dueDate: '2025-10-01',
     createdAt: '2025-09-30 07:00',
@@ -53,7 +53,7 @@ let tasks = [
     title: 'Read Next documentation updates',
     description: 'Study latest framework changes',
     priority: 3,
-    completed: false,
+    done: false,
     category: 'learning',
     dueDate: '2025-10-07',
     createdAt: '2025-09-30 20:15',
@@ -63,7 +63,7 @@ let tasks = [
     title: 'Plan weekend trip',
     description: 'Organize travel and activities',
     priority: 1,
-    completed: false,
+    done: false,
     category: 'recreation',
     dueDate: '2025-10-04',
     createdAt: '2025-09-30 19:45',
@@ -95,12 +95,18 @@ app.post('/tasks', serverErrorHandler, (req, res) => {
 
 app.patch('/tasks/:id', serverErrorHandler, (req, res) => {
   const { id } = req.params;
-  const { completed } = req.body;
+  const { done } = req.body;
 
-  tasks = tasks.map((task) =>
-    task.id == Number(id) ? { ...task, completed: completed } : task
-  );
-  res.json(tasks);
+  let updatedTask;
+  tasks = tasks.map((task) => {
+    if (task.id == Number(id)) {
+      updatedTask = { ...task, done };
+      return updatedTask;
+    }
+    return task;
+  });
+
+  res.json(updatedTask);
 });
 
 app.delete('/tasks/:id', serverErrorHandler, (req, res) => {

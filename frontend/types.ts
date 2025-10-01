@@ -3,8 +3,10 @@ export type TasksProps = {
   title: string;
   description: string;
   priority: number;
-  completed: boolean;
+  done: boolean;
   category: string;
   dueDate: string;
   createdAt: string;
 };
+
+export type FilterStatus = 'all' | 'done' | 'undone';

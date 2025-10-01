@@ -1,4 +1,4 @@
-# ToDo - Your ultimate to do app:fire:
+# ToDo - Your ultimate to do app :fire:
 
 Create and manage todos with ease using this modern full-stack application
 
