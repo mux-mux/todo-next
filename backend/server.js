@@ -25,7 +25,7 @@ let tasks = [
     priority: 3,
     done: false,
     category: 'work',
-    dueDate: '2025-10-05',
+    dueDate: '2025-10-06',
     createdAt: '2025-09-30 09:00',
   },
   {
@@ -35,7 +35,7 @@ let tasks = [
     priority: 2,
     done: false,
     category: 'personal',
-    dueDate: '2025-10-02',
+    dueDate: '2025-10-04',
     createdAt: '2025-09-30 18:30',
   },
   {
@@ -45,7 +45,7 @@ let tasks = [
     priority: 4,
     done: false,
     category: 'health',
-    dueDate: '2025-10-01',
+    dueDate: '2025-10-03',
     createdAt: '2025-09-30 07:00',
   },
   {
@@ -65,7 +65,7 @@ let tasks = [
     priority: 1,
     done: false,
     category: 'recreation',
-    dueDate: '2025-10-04',
+    dueDate: '2025-10-06',
     createdAt: '2025-09-30 19:45',
   },
 ];
