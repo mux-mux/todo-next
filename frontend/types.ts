@@ -5,8 +5,8 @@ export type TasksProps = {
   priority: number;
   done: boolean;
   category: string;
-  dueDate: string;
-  createdAt: string;
+  due: string;
+  createdat: string;
 };
 
 export type NewTaskProps = {
@@ -14,7 +14,7 @@ export type NewTaskProps = {
   description: string;
   priority: number;
   category: string;
-  dueDate: string;
+  due: string;
 };
 
 export type FilterStatus = 'all' | 'done' | 'undone';

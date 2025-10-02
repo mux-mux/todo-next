@@ -32,7 +32,7 @@ const initialNewTasks = {
   description: '',
   priority: 5,
   category: '',
-  dueDate: new Date().toISOString().split('T')[0],
+  due: new Date().toISOString().split('T')[0],
 };
 
 export default function TaskList({
@@ -50,17 +50,17 @@ export default function TaskList({
   const addTask = async () => {
     if (!newTask.title.trim()) return;
 
-    const { title, description, priority, category, dueDate } = newTask;
+    const { title, description, priority, category, due } = newTask;
 
     const res = await fetch('http://localhost:3001/tasks', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, description, priority, category, dueDate }),
+      body: JSON.stringify({ title, description, priority, category, due }),
     });
     const nextTask = await res.json();
     console.log(nextTask);
 
-    setTasks(nextTask);
+    setTasks([...tasks, nextTask]);
     setNewTask(initialNewTasks);
     setIsDialogOpen(false);
   };
@@ -233,13 +233,13 @@ export default function TaskList({
                     />
                   </div>
                   <div>
-                    <Label htmlFor="dueDate">Due Date</Label>
+                    <Label htmlFor="due">Due Date</Label>
                     <Input
-                      id="dueDate"
+                      id="due"
                       type="date"
-                      value={newTask.dueDate}
+                      value={newTask.due}
                       onChange={(e) =>
-                        setNewTask({ ...newTask, dueDate: e.target.value })
+                        setNewTask({ ...newTask, due: e.target.value })
                       }
                       className="cursor-pointer"
                     />
@@ -323,19 +323,16 @@ export default function TaskList({
                           {task.category && (
                             <span className="mr-2">🗒️{task.category}</span>
                           )}
-                          {task.dueDate && (
+                          {task.due && (
                             <span
                               className={
-                                new Date(task.dueDate).setHours(0, 0, 0, 0) <
+                                new Date(task.due).setHours(0, 0, 0, 0) <
                                 new Date().setHours(0, 0, 0, 0)
                                   ? 'text-red-500'
                                   : ''
                               }
                             >
-                              📅{' '}
-                              {new Date(task.dueDate)
-                                .toISOString()
-                                .slice(0, 10)}
+                              📅 {new Date(task.due).toISOString().slice(0, 10)}
                             </span>
                           )}
                         </span>

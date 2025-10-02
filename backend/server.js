@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { Pool } from 'pg';
 import { serverErrorHandler } from './middleware/serverErrorHandler.js';
 
 if (process.env.NODE_ENV !== 'production') {
@@ -15,111 +16,46 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-let id = 0;
-
-let tasks = [
-  {
-    id: ++id,
-    title: 'Complete project proposal document',
-    description: 'Write and finalize the project proposal',
-    priority: 3,
-    done: false,
-    category: 'work',
-    dueDate: '2025-10-06',
-    createdAt: '2025-09-30 09:00',
-  },
-  {
-    id: ++id,
-    title: 'Buy groceries for the week',
-    description: 'Get food and household supplies',
-    priority: 2,
-    done: false,
-    category: 'personal',
-    dueDate: '2025-10-04',
-    createdAt: '2025-09-30 18:30',
-  },
-  {
-    id: ++id,
-    title: '30-minute morning run',
-    description: 'Daily exercise for fitness',
-    priority: 4,
-    done: false,
-    category: 'health',
-    dueDate: '2025-10-03',
-    createdAt: '2025-09-30 07:00',
-  },
-  {
-    id: ++id,
-    title: 'Read Next documentation updates',
-    description: 'Study latest framework changes',
-    priority: 3,
-    done: false,
-    category: 'learning',
-    dueDate: '2025-10-07',
-    createdAt: '2025-09-30 20:15',
-  },
-  {
-    id: ++id,
-    title: 'Plan weekend trip',
-    description: 'Organize travel and activities',
-    priority: 1,
-    done: false,
-    category: 'recreation',
-    dueDate: '2025-10-06',
-    createdAt: '2025-09-30 19:45',
-  },
-];
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 app.get('/', (req, res) => res.send('server is working'));
 
-app.get('/tasks', serverErrorHandler, (req, res) => {
-  res.json(tasks);
+app.get('/tasks', serverErrorHandler, async (req, res) => {
+  const { rows } = await pool.query('SELECT * FROM tasks');
+  res.json(rows);
 });
 
-app.post('/tasks', serverErrorHandler, (req, res) => {
-  const { title, description, priority, category, dueDate } = req.body;
+app.post('/tasks', serverErrorHandler, async (req, res) => {
+  const { title, description, priority, category, due } = req.body;
 
-  const newTask = {
-    id: ++id,
-    title,
-    description,
-    priority,
-    category,
-    dueDate,
-    createdAt: getCurrentDateTime(),
-  };
+  const { rows } = await pool.query(
+    `INSERT INTO tasks (title, description, priority, category, due)
+   VALUES ($1, $2, $3, $4, $5)
+   RETURNING *`,
+    [title, description, priority, category, due]
+  );
 
-  tasks.push(newTask);
-  res.status(201).json(tasks);
+  res.status(201).json(rows[0]);
 });
 
-app.patch('/tasks/:id', serverErrorHandler, (req, res) => {
+app.patch('/tasks/:id', serverErrorHandler, async (req, res) => {
   const { id } = req.params;
   const { done } = req.body;
 
-  let updatedTask;
-  tasks = tasks.map((task) => {
-    if (task.id == Number(id)) {
-      updatedTask = { ...task, done };
-      return updatedTask;
-    }
-    return task;
-  });
-
-  res.json(updatedTask);
+  const { rows } = await pool.query(
+    'UPDATE tasks SET done=$1 WHERE id=$2 RETURNING *',
+    [done, id]
+  );
+  res.json(rows[0]);
 });
 
-app.delete('/tasks/:id', serverErrorHandler, (req, res) => {
+app.delete('/tasks/:id', serverErrorHandler, async (req, res) => {
   const { id } = req.params;
 
-  tasks = tasks.filter((task) => task.id !== Number(id));
+  await pool.query('DELETE FROM tasks WHERE id=$1', [id]);
   res.status(204).end();
 });
 
 app.listen(PORT, () => {
   console.log(`Server is running on: ${BASE_URL}`);
 });
-
-function getCurrentDateTime() {
-  return new Date().toISOString().replace('T', ' ').substring(0, 16);
-}

@@ -1,6 +1,6 @@
 BEGIN TRANSACTION;
 
-INSERT INTO todos (title, description, priority, done, category, dueDate, createdAt) VALUES
+INSERT INTO tasks (title, description, priority, done, category, due, created) VALUES
 ('Complete project proposal document', 'Write and finalize the project proposal', 3, FALSE, 'work', '2025-10-05', '2025-09-30 09:00:00'),
 ('Buy groceries for the week', 'Get food and household supplies', 2, FALSE, 'personal', '2025-10-02', '2025-09-30 18:30:00'),
 ('30-minute morning run', 'Daily exercise for fitness', 4, FALSE, 'health', '2025-10-01', '2025-09-30 07:00:00'),
