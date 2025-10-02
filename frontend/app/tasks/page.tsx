@@ -1,9 +1,11 @@
 import { TasksProps } from '@/types';
 import { GlobalError } from '../global-error';
-import TaskList from './task-list';
+import TaskList from '@/components/tasks/TaskList';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 async function getTasks(): Promise<TasksProps[]> {
-  const res = await fetch('http://localhost:3001/tasks', {
+  const res = await fetch(`${API_URL}/tasks`, {
     cache: 'no-store',
   });
 
