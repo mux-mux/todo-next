@@ -6,12 +6,24 @@ Create and manage todos with ease using this modern full-stack application
 
 The project follows a full-stack structure:
 
-- `backend/` - Express.js
-- `frontend/` - React.js + Next.js
+- `backend/` - Express + PostgreSQL
+- `frontend/` - React.js
+- `backend/postgres/` - Docker setup for the database
+- `backend/docker-compose.yml` - Orchestrates services
+
+<div align="center">
+  <img src="https://jsgo.pro/media/structure/todo_next_project_structure.png" alt="ToDo Next Folder structure" width="100%" />
+  <br>
+</div>
 
 ## How To Use :closed_lock_with_key:
 
-### 1️⃣ Clone the Repository
+### 1️⃣ Sign Up, Install & Run Docker Desktop
+
+Download, install and run Docker Desktop:  
+🔗 [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+
+### 2️⃣ Clone the Repository
 
 Open a terminal or command prompt and run:
 
@@ -20,7 +32,7 @@ git clone git@github.com:mux-mux/todo-next.git
 cd todo-next
 ```
 
-### 2️⃣ Setup .env file
+### 3️⃣ Setup Postgres Database
 
 Inside the `backend` folder, create a file named `.env` with the following content:
 
@@ -29,19 +41,29 @@ Inside the `backend` folder, create a file named `.env` with the following conte
 PORT=3001
 BASE_URL=http://localhost:3001
 NODE_ENV=development
+
+# Database Config
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=admin
+POSTGRES_DB=todo-next-docker
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+
+# Connection URL
+DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
 ```
 
-### 3️⃣ Start Backend
+### 4️⃣ Start Backend
 
-This will set start Express server:
+This will set start PostgreSQL and the Express server:
 
 ```sh
 cd backend
 npm install
-node server.js
+npm run docker
 ```
 
-### 4️⃣ Start Frontend
+### 5️⃣ Start Frontend
 
 This will Open the browser & listen to files changes<br/>
 Open another terminal in the project root and run:
@@ -54,3 +76,13 @@ npm run dev
 
 Your app should now be running!<br/>
 On: 🔗 http://localhost:3000
+
+### 🎯 Notes
+
+Ensure Docker Desktop is running before executing npm run docker.<br/>
+If you encounter any issues, try running:
+
+```sh
+cd backend
+docker-compose down && npm run docker
+```

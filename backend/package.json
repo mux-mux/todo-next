@@ -4,6 +4,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
+    "docker": "docker-compose up --build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
