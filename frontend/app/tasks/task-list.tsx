@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { FilterStatus, TasksProps } from '@/types';
+import { FilterStatus, TasksProps, NewTaskProps } from '@/types';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Select,
@@ -10,11 +10,30 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { Trash2, Search } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Trash2, Search, Plus } from 'lucide-react';
+
+const initialNewTasks = {
+  title: '',
+  description: '',
+  priority: 5,
+  category: '',
+  dueDate: new Date().toISOString().split('T')[0],
+};
 
 export default function TaskList({
   initialTasks,
@@ -22,9 +41,29 @@ export default function TaskList({
   initialTasks: TasksProps[];
 }) {
   const [tasks, setTasks] = useState<TasksProps[]>(() => initialTasks);
+  const [newTask, setNewTask] = useState<NewTaskProps>(initialNewTasks);
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | 'none'>('none');
   const [searchTerm, setSearchTerm] = useState('');
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const addTask = async () => {
+    if (!newTask.title.trim()) return;
+
+    const { title, description, priority, category, dueDate } = newTask;
+
+    const res = await fetch('http://localhost:3001/tasks', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, description, priority, category, dueDate }),
+    });
+    const nextTask = await res.json();
+    console.log(nextTask);
+
+    setTasks(nextTask);
+    setNewTask(initialNewTasks);
+    setIsDialogOpen(false);
+  };
 
   const filteredTasks = tasks
     .filter((task) => {
@@ -100,7 +139,7 @@ export default function TaskList({
               value={filterStatus}
               onValueChange={(value: FilterStatus) => setFilterStatus(value)}
             >
-              <SelectTrigger className="w-[140px] bg-white">
+              <SelectTrigger className="w-[140px] bg-white cursor-pointer">
                 <SelectValue placeholder="Filter tasks" />
               </SelectTrigger>
               <SelectContent>
@@ -116,7 +155,7 @@ export default function TaskList({
                 setSortOrder(value)
               }
             >
-              <SelectTrigger className="w-[140px] bg-white">
+              <SelectTrigger className="w-[140px] bg-white cursor-pointer">
                 <SelectValue placeholder="Sort by priority" />
               </SelectTrigger>
               <SelectContent>
@@ -125,6 +164,102 @@ export default function TaskList({
                 <SelectItem value="none">None</SelectItem>
               </SelectContent>
             </Select>
+
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button className="flex items-center gap-2 cursor-pointer">
+                  <Plus className="h-4 w-4" /> Add Task
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Add New Task</DialogTitle>
+                  <DialogDescription>
+                    Create a task with title, description, priority, due date &
+                    category.
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="title">Title</Label>
+                    <Input
+                      id="title"
+                      value={newTask.title}
+                      onChange={(e) =>
+                        setNewTask({ ...newTask, title: e.target.value })
+                      }
+                      placeholder="Task title"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="description">Description</Label>
+                    <Textarea
+                      id="description"
+                      value={newTask.description}
+                      onChange={(e) =>
+                        setNewTask({ ...newTask, description: e.target.value })
+                      }
+                      placeholder="Task description"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="priority">
+                      Priority: {newTask.priority}
+                    </Label>
+                    <Input
+                      id="priority"
+                      type="range"
+                      min="1"
+                      max="10"
+                      value={newTask.priority}
+                      onChange={(e) =>
+                        setNewTask({
+                          ...newTask,
+                          priority: Number(e.target.value),
+                        })
+                      }
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="category">Category</Label>
+                    <Input
+                      id="category"
+                      value={newTask.category}
+                      onChange={(e) =>
+                        setNewTask({ ...newTask, category: e.target.value })
+                      }
+                      placeholder="Work, Study, Personal..."
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="dueDate">Due Date</Label>
+                    <Input
+                      id="dueDate"
+                      type="date"
+                      value={newTask.dueDate}
+                      onChange={(e) =>
+                        setNewTask({ ...newTask, dueDate: e.target.value })
+                      }
+                      className="cursor-pointer"
+                    />
+                  </div>
+                </div>
+
+                <DialogFooter>
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsDialogOpen(false)}
+                    className="cursor-pointer"
+                  >
+                    Cancel
+                  </Button>
+                  <Button onClick={addTask} className="cursor-pointer">
+                    Add Task
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
 
@@ -168,7 +303,7 @@ export default function TaskList({
                         <Badge
                           className={
                             getPriorityColor(task.priority) +
-                            'inline-block min-w-[26px]'
+                            ' inline-block min-w-[26px]'
                           }
                         >
                           {task.priority}
@@ -191,7 +326,8 @@ export default function TaskList({
                           {task.dueDate && (
                             <span
                               className={
-                                new Date(task.dueDate) < new Date()
+                                new Date(task.dueDate).setHours(0, 0, 0, 0) <
+                                new Date().setHours(0, 0, 0, 0)
                                   ? 'text-red-500'
                                   : ''
                               }
