@@ -56,6 +56,10 @@ app.delete('/tasks/:id', serverErrorHandler, async (req, res) => {
   res.status(204).end();
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on: ${BASE_URL}`);
-});
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Server is running on: ${BASE_URL}`);
+  });
+}
+
+export default app;

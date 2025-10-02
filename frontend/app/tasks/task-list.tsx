@@ -58,7 +58,6 @@ export default function TaskList({
       body: JSON.stringify({ title, description, priority, category, due }),
     });
     const nextTask = await res.json();
-    console.log(nextTask);
 
     setTasks([...tasks, nextTask]);
     setNewTask(initialNewTasks);
@@ -97,20 +96,35 @@ export default function TaskList({
   };
 
   const toggleTaskCompletion = async (id: number, done: boolean) => {
-    const res = await fetch(`http://localhost:3001/tasks/${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ done }),
-    });
-    const updatedTask = await res.json();
+    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, done } : t)));
 
-    setTasks(
-      tasks.map((t) =>
-        t.id === Number(updatedTask.id)
-          ? { ...t, ...updatedTask, id: Number(updatedTask.id) }
-          : t
-      )
-    );
+    try {
+      const res = await fetch(`http://localhost:3001/tasks/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ done }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to update task');
+      }
+
+      const updatedTask = await res.json();
+
+      setTasks(
+        tasks.map((t) =>
+          t.id === Number(updatedTask.id)
+            ? { ...t, ...updatedTask, id: Number(updatedTask.id) }
+            : t
+        )
+      );
+    } catch (err) {
+      console.error(err);
+
+      setTasks((prev) =>
+        prev.map((t) => (t.id === id ? { ...t, done: !done } : t))
+      );
+    }
   };
 
   return (

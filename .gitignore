@@ -36,6 +36,7 @@ lerna-debug.log*
 # typescript
 *.tsbuildinfo
 *next-env.d.ts
+*global.d.ts
 
 # testing
 */coverage
