@@ -1,4 +1,4 @@
-# ToDo - Your ultimate to do app :fire:
+# ToDo-Next - Your ultimate task manager app :fire:
 
 Create and manage todos with ease using this modern full-stack application
 

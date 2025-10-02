@@ -1,0 +1,32 @@
+services:
+  todonext:
+    container_name: todo-next
+    build: ./
+    command: npm run start
+    working_dir: /usr/src/todonext
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - DATABASE_URL=${DATABASE_URL}
+      - PORT=${PORT}
+      - BASE_URL=${BASE_URL}
+    depends_on:
+      - postgres
+    ports:
+      - '${PORT}:${PORT}'
+    volumes:
+      - ./:/usr/src/todonext
+      - /usr/src/todonext/node_modules
+
+  postgres:
+    build: ./postgres
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+    ports:
+      - '${POSTGRES_PORT}:${POSTGRES_PORT}'
