@@ -105,53 +105,54 @@ export default function TaskList({
             </span>
           </p>
         </header>
+        <main>
+          <TaskFilters
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            filterStatus={filterStatus}
+            setFilterStatus={setFilterStatus}
+            sortOrder={sortOrder}
+            setSortOrder={setSortOrder}
+          >
+            <TaskFormDialog
+              newTask={newTask}
+              setNewTask={setNewTask}
+              addTask={addTask}
+            />
+          </TaskFilters>
 
-        <TaskFilters
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          filterStatus={filterStatus}
-          setFilterStatus={setFilterStatus}
-          sortOrder={sortOrder}
-          setSortOrder={setSortOrder}
-        >
-          <TaskFormDialog
-            newTask={newTask}
-            setNewTask={setNewTask}
-            addTask={addTask}
-          />
-        </TaskFilters>
+          <div className="space-y-4">
+            {filteredTasks.length === 0 ? (
+              <Card className="text-center py-12">
+                <CardContent>
+                  <p className="text-gray-500">
+                    {filterStatus !== 'all'
+                      ? 'No tasks match your search/filter criteria'
+                      : 'No tasks yet. Add your first task!'}
+                  </p>
+                </CardContent>
+              </Card>
+            ) : (
+              filteredTasks.map((task) => (
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  toggleTaskCompletion={toggleTaskCompletion}
+                  removeTask={removeTask}
+                />
+              ))
+            )}
+          </div>
+        </main>
 
-        <div className="space-y-4">
-          {filteredTasks.length === 0 ? (
-            <Card className="text-center py-12">
-              <CardContent>
-                <p className="text-gray-500">
-                  {filterStatus !== 'all'
-                    ? 'No tasks match your search/filter criteria'
-                    : 'No tasks yet. Add your first task!'}
-                </p>
-              </CardContent>
-            </Card>
-          ) : (
-            filteredTasks.map((task) => (
-              <TaskCard
-                key={task.id}
-                task={task}
-                toggleTaskCompletion={toggleTaskCompletion}
-                removeTask={removeTask}
-              />
-            ))
-          )}
-        </div>
-
-        <div className="mt-8 text-center text-sm text-gray-600">
+        <footer className="mt-8 text-center text-sm text-gray-600">
           {tasks.length > 0 && (
             <p>
               {tasks.filter((t) => t.done).length} of {tasks.length} tasks
               completed
             </p>
           )}
-        </div>
+        </footer>
       </div>
     </div>
   );

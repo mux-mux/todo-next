@@ -122,4 +122,8 @@
   label {
     padding-bottom: 4px;
   }
+  button,
+  [role='button'] {
+    cursor: pointer;
+  }
 }

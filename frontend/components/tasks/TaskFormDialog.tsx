@@ -33,7 +33,7 @@ export default function TaskFormDialog({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button className="flex items-center gap-2 cursor-pointer">
+        <Button className="flex items-center gap-2">
           <Plus className="h-4 w-4" /> Add Task
         </Button>
       </DialogTrigger>
@@ -106,11 +106,7 @@ export default function TaskFormDialog({
         </div>
 
         <DialogFooter>
-          <Button
-            variant="outline"
-            onClick={() => setIsDialogOpen(false)}
-            className="cursor-pointer"
-          >
+          <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
             Cancel
           </Button>
           <Button
@@ -118,7 +114,6 @@ export default function TaskFormDialog({
               addTask();
               setIsDialogOpen(false);
             }}
-            className="cursor-pointer"
           >
             Add Task
           </Button>
