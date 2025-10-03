@@ -46,6 +46,7 @@ export default function TaskFilters({
         <Select
           value={filterStatus}
           onValueChange={(val: FilterStatus) => setFilterStatus(val)}
+          aria-label="Filter tasks done/undone/all"
         >
           <SelectTrigger className="w-[140px] bg-white cursor-pointer">
             <SelectValue placeholder="Filter tasks" />
@@ -60,6 +61,7 @@ export default function TaskFilters({
         <Select
           value={sortOrder}
           onValueChange={(val: 'asc' | 'desc' | 'none') => setSortOrder(val)}
+          aria-label="Sort tasks asc/desc/none"
         >
           <SelectTrigger className="w-[140px] bg-white cursor-pointer">
             <SelectValue placeholder="Sort by priority" />

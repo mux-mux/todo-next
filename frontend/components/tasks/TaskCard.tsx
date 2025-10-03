@@ -32,16 +32,17 @@ export default function TaskCard({
             checked={task.done}
             onCheckedChange={() => toggleTaskCompletion(task.id, !task.done)}
             className="mt-1 h-5 w-5"
+            aria-label={`Mark ${task.title} task as done/undone`}
           />
           <div className="flex-1">
             <div className="flex items-center justify-between gap-4">
-              <h3
+              <h2
                 className={`text-lg font-medium ${
                   task.done ? 'line-through text-gray-500' : 'text-gray-800'
                 }`}
               >
                 {task.title}
-              </h3>
+              </h2>
               <Badge
                 className={
                   getPriorityColor(task.priority) + ' inline-block min-w-[26px]'
@@ -69,7 +70,7 @@ export default function TaskCard({
                     className={
                       new Date(task.due).setHours(0, 0, 0, 0) <
                       new Date().setHours(0, 0, 0, 0)
-                        ? 'text-red-500'
+                        ? 'text-red-600'
                         : ''
                     }
                   >
@@ -81,7 +82,8 @@ export default function TaskCard({
                 variant="ghost"
                 size="sm"
                 onClick={() => removeTask(task.id)}
-                className="text-red-500 hover:text-red-700 hover:bg-red-50 translate-x-[5px]"
+                className="text-red-600 hover:text-red-700 hover:bg-red-50 translate-x-[5px]"
+                aria-label={`Delete ${task.title} from task list`}
               >
                 <Trash2 className="h-4 w-4" />
               </Button>
