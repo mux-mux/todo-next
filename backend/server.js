@@ -15,9 +15,6 @@ const pool = new Pool({
   ssl: inProduction ? { rejectUnauthorized: false } : false,
 });
 
-console.log('Database URL is:', process.env.DATABASE_URL);
-console.log('Environment is:', process.env.NODE_ENV);
-
 const app = express();
 
 app.use(cors());

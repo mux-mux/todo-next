@@ -2,6 +2,13 @@
 
 Create and manage todos with ease using this modern full-stack application
 
+## [Live Link](https://todo-next-on.vercel.app/) :link:
+
+<div align="center">
+  <img src="https://jsgo.pro/media/gif/todo-next.gif" alt="ToDo Next Demo" />
+  <br>
+</div>
+
 ## Folder structure :open_file_folder:
 
 The project follows a full-stack structure:
