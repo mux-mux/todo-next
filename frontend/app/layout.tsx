@@ -12,6 +12,8 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export const metadata: Metadata = {
   title: 'Task Manager - Organize your tasks efficiently',
   description:
@@ -21,11 +23,11 @@ export const metadata: Metadata = {
     title: 'Task Manager',
     description:
       'Organize your tasks efficiently with categories, due dates & more.',
-    url: 'https://todo-next-on.vercel.app/',
+    url: `${API_URL}`,
     siteName: 'Task Manager',
     images: [
       {
-        url: 'https://todo-next-on.vercel.app/og-image.png',
+        url: `${API_URL}/og-image.png`,
         width: 1200,
         height: 630,
       },
@@ -37,7 +39,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Task Manager',
     description: 'Organize your tasks efficiently with priorities & due dates.',
-    images: ['https://todo-next-on.vercel.app/twitter-card.png'],
+    images: [`${API_URL}/twitter-card.png`],
   },
 };
 
