@@ -17,4 +17,6 @@ export type NewTaskProps = {
   due: string;
 };
 
+export type FilterCategory = string;
+
 export type FilterStatus = 'all' | 'done' | 'undone';

@@ -25,6 +25,7 @@ export default function TaskList({
   const [tasks, setTasks] = useState<TasksProps[]>(initialTasks);
   const [newTask, setNewTask] = useState<NewTaskProps>(initialNewTasks);
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
+  const [filterCategory, setFilterCategory] = useState('all');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | 'none'>('none');
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -75,11 +76,16 @@ export default function TaskList({
         (task.description || '')
           .toLowerCase()
           .includes(searchTerm.toLowerCase());
+
+      const matchesCategory =
+        filterCategory === 'all' || task.category === filterCategory;
+
       const matchesFilter =
         filterStatus === 'all' ||
         (filterStatus === 'done' && task.done) ||
         (filterStatus === 'undone' && !task.done);
-      return matchesSearch && matchesFilter;
+
+      return matchesSearch && matchesFilter && matchesCategory;
     })
     .sort((a, b) => {
       if (sortOrder === 'asc') return a.priority - b.priority;
@@ -107,10 +113,13 @@ export default function TaskList({
         </header>
         <main>
           <TaskFilters
+            tasks={tasks}
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
             filterStatus={filterStatus}
             setFilterStatus={setFilterStatus}
+            filterCategory={filterCategory}
+            setFilterCategory={setFilterCategory}
             sortOrder={sortOrder}
             setSortOrder={setSortOrder}
           >

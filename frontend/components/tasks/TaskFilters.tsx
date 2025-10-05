@@ -1,6 +1,6 @@
 'use client';
 
-import { FilterStatus } from '@/types';
+import { FilterStatus, FilterCategory, TasksProps } from '@/types';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -12,27 +12,33 @@ import {
 import { Search } from 'lucide-react';
 
 type TaskFiltersProps = {
+  tasks: TasksProps[];
   searchTerm: string;
   setSearchTerm: (value: string) => void;
   filterStatus: FilterStatus;
   setFilterStatus: (value: FilterStatus) => void;
+  filterCategory: FilterCategory;
+  setFilterCategory: (value: FilterCategory) => void;
   sortOrder: 'asc' | 'desc' | 'none';
   setSortOrder: (value: 'asc' | 'desc' | 'none') => void;
   children?: React.ReactNode;
 };
 
 export default function TaskFilters({
+  tasks,
   searchTerm,
   setSearchTerm,
   filterStatus,
   setFilterStatus,
+  filterCategory,
+  setFilterCategory,
   sortOrder,
   setSortOrder,
   children,
 }: TaskFiltersProps) {
   return (
-    <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-      <div className="relative w-full md:w-1/3">
+    <div className="mb-6 flex flex-col gap-4">
+      <div className="relative w-full">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
         <Input
           placeholder="Search tasks..."
@@ -69,7 +75,26 @@ export default function TaskFilters({
           <SelectContent>
             <SelectItem value="desc">High to Low</SelectItem>
             <SelectItem value="asc">Low to High</SelectItem>
-            <SelectItem value="none">None</SelectItem>
+            <SelectItem value="none">Unsorted</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select
+          value={filterCategory}
+          onValueChange={(value: string) => setFilterCategory(value)}
+        >
+          <SelectTrigger className="w-[140px] bg-white cursor-pointer">
+            <SelectValue placeholder="Filter by category" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Categories</SelectItem>
+            {[...new Set(tasks.map((t) => t.category).filter(Boolean))].map(
+              (cat) => (
+                <SelectItem key={cat} value={cat}>
+                  {cat}
+                </SelectItem>
+              )
+            )}
           </SelectContent>
         </Select>
 

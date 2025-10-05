@@ -1,18 +1,6 @@
-import { TasksProps } from '@/types';
 import { GlobalError } from '../global-error';
 import TaskList from '@/components/tasks/TaskList';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-async function getTasks(): Promise<TasksProps[]> {
-  const res = await fetch(`${API_URL}/tasks`, {
-    cache: 'no-store',
-  });
-
-  if (!res.ok) throw new Error('Failed to fetch tasks');
-
-  return res.json();
-}
+import { getTasks } from '@/app/lib/tasks';
 
 export default async function TasksPage() {
   try {
