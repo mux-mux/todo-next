@@ -1,6 +1,6 @@
 'use client';
 
-import { NewTaskProps } from '@/types';
+import { NewTaskProps, TasksProps } from '@/types';
 import {
   Dialog,
   DialogContent,
@@ -16,19 +16,31 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
 
 type TaskFormDialogProps = {
+  tasks: TasksProps[];
   newTask: NewTaskProps;
   setNewTask: React.Dispatch<React.SetStateAction<NewTaskProps>>;
   addTask: () => void;
 };
 
 export default function TaskFormDialog({
+  tasks,
   newTask,
   setNewTask,
   addTask,
 }: TaskFormDialogProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const categories = Array.from(
+    new Set(tasks.map((t) => t.category).filter(Boolean))
+  );
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -84,14 +96,36 @@ export default function TaskFormDialog({
           </div>
           <div>
             <Label htmlFor="category">Category</Label>
-            <Input
-              id="category"
+            <Select
               value={newTask.category}
-              onChange={(e) =>
-                setNewTask({ ...newTask, category: e.target.value })
+              onValueChange={(value) =>
+                setNewTask({ ...newTask, category: value })
               }
-              placeholder="Work, Study, Personal..."
-            />
+            >
+              <SelectTrigger id="category" className="w-full bg-white">
+                <SelectValue placeholder="Choose category" />
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((cat) => (
+                  <SelectItem key={cat} value={cat}>
+                    {cat}
+                  </SelectItem>
+                ))}
+                <SelectItem value="newCategory">
+                  <Plus /> Add new...
+                </SelectItem>
+              </SelectContent>
+            </Select>
+            {newTask.category === 'newCategory' && (
+              <Input
+                placeholder="Enter new category"
+                value={newTask.title || ''}
+                onChange={(e) =>
+                  setNewTask({ ...newTask, category: e.target.value })
+                }
+                className="mt-2"
+              />
+            )}
           </div>
           <div>
             <Label htmlFor="due">Due Date</Label>

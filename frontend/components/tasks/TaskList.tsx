@@ -124,6 +124,7 @@ export default function TaskList({
             setSortOrder={setSortOrder}
           >
             <TaskFormDialog
+              tasks={tasks}
               newTask={newTask}
               setNewTask={setNewTask}
               addTask={addTask}
