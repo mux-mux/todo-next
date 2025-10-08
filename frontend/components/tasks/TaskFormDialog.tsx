@@ -133,7 +133,7 @@ export default function TaskFormDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-6 max-h-[80vh] overflow-y-auto">
+        <div className="space-y-6 max-h-[80vh] p-4 overflow-y-auto">
           <div className="relative">
             <Label htmlFor="title">Title</Label>
             <Input
