@@ -133,8 +133,8 @@ export default function TaskFormDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4">
-          <div>
+        <div className="space-y-6">
+          <div className="relative">
             <Label htmlFor="title">Title</Label>
             <Input
               id="title"
@@ -145,7 +145,9 @@ export default function TaskFormDialog({
               placeholder="Task title"
             />
             {errors.title && (
-              <p className="text-red-500 text-sm mt-1">{errors.title}</p>
+              <p className="text-red-500 text-sm mt-1 absolute -bottom-5">
+                {errors.title}
+              </p>
             )}
           </div>
           <div>
@@ -189,7 +191,7 @@ export default function TaskFormDialog({
               }
             />
           </div>
-          <div>
+          <div className="relative">
             <Label htmlFor="category">Category</Label>
             <Select
               value={newTask.category}
@@ -224,10 +226,12 @@ export default function TaskFormDialog({
               />
             )}
             {errors.category && (
-              <p className="text-red-500 text-sm mt-1">{errors.category}</p>
+              <p className="text-red-500 text-sm mt-1 absolute -bottom-5">
+                {errors.category}
+              </p>
             )}
           </div>
-          <div>
+          <div className="relative">
             <Label htmlFor="due">Due Date</Label>
             <Input
               id="due"
@@ -237,7 +241,9 @@ export default function TaskFormDialog({
               className="cursor-pointer"
             />
             {errors.due && (
-              <p className="text-red-500 text-sm mt-1">{errors.due}</p>
+              <p className="text-red-500 text-sm mt-1 absolute -bottom-5">
+                {errors.due}
+              </p>
             )}
           </div>
         </div>
