@@ -95,7 +95,7 @@ export default function TaskList({
 
   return (
     <div className="min-h-screen rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-100 p-4 md:p-8">
-      <div className="mx-auto max-w-4xl">
+      <div className="mx-auto w-xl">
         <header className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-gray-800 md:text-4xl">
             Task Manager

@@ -15,7 +15,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Plus } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Select,
   SelectContent,
@@ -38,9 +38,84 @@ export default function TaskFormDialog({
   addTask,
 }: TaskFormDialogProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
   const categories = Array.from(
     new Set(tasks.map((t) => t.category).filter(Boolean))
   );
+
+  const validateField = (field: string, value: string) => {
+    let message = '';
+
+    switch (field) {
+      case 'title':
+        if (!value.trim()) message = 'Title is required.';
+        else if (value.trim().length < 3)
+          message = 'Title must be at least 3 characters.';
+        else if (value.trim().length > 255)
+          message = 'Title cannot exceed 255 characters.';
+        break;
+
+      case 'description':
+        if (value.length > 1000)
+          message = 'Description cannot exceed 1000 characters.';
+        break;
+
+      case 'category':
+        if (!value.trim()) message = 'Category is required.';
+        break;
+
+      case 'due':
+        if (!value) message = 'Due date is required.';
+        else {
+          const dueDate = new Date(value);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          if (dueDate < today) message = 'Due date must be in the future.';
+        }
+        break;
+    }
+
+    setErrors((prev) => ({ ...prev, [field]: message }));
+  };
+
+  useEffect(() => {
+    if (isSubmitted) validateField('title', newTask.title);
+  }, [newTask.title, isSubmitted]);
+
+  useEffect(() => {
+    if (isSubmitted) validateField('description', newTask.description);
+  }, [newTask.description, isSubmitted]);
+
+  useEffect(() => {
+    if (isSubmitted) validateField('category', newTask.category);
+  }, [newTask.category, isSubmitted]);
+
+  useEffect(() => {
+    if (isSubmitted) validateField('due', newTask.due);
+  }, [newTask.due, isSubmitted]);
+
+  const isFormValid = () =>
+    Object.values(errors).every((msg) => !msg) &&
+    newTask.title.trim() &&
+    newTask.category &&
+    newTask.due;
+
+  const handleAddTask = () => {
+    setIsSubmitted(true);
+    validateField('title', newTask.title);
+    validateField('description', newTask.description);
+    validateField('category', newTask.category);
+    validateField('due', newTask.due);
+
+    if (isFormValid()) {
+      addTask();
+      setIsDialogOpen(false);
+      setErrors({});
+      setIsSubmitted(false);
+    }
+  };
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -69,17 +144,37 @@ export default function TaskFormDialog({
               }
               placeholder="Task title"
             />
+            {errors.title && (
+              <p className="text-red-500 text-sm mt-1">{errors.title}</p>
+            )}
           </div>
           <div>
             <Label htmlFor="description">Description</Label>
             <Textarea
               id="description"
               value={newTask.description}
-              onChange={(e) =>
-                setNewTask({ ...newTask, description: e.target.value })
-              }
-              placeholder="Task description"
+              onChange={(e) => {
+                if (e.target.value.length <= 1000) {
+                  setNewTask({ ...newTask, description: e.target.value });
+                }
+              }}
+              placeholder="Task description (max 1000 characters)"
             />
+
+            <div className="flex justify-between text-sm mt-1">
+              <span
+                className={`${
+                  newTask.description.length > 950
+                    ? 'text-yellow-600'
+                    : 'text-gray-500'
+                }`}
+              >
+                {newTask.description.length}/1000
+              </span>
+              {errors.description && (
+                <span className="text-red-500">{errors.description}</span>
+              )}
+            </div>
           </div>
           <div>
             <Label htmlFor="priority">Priority: {newTask.priority}</Label>
@@ -119,12 +214,17 @@ export default function TaskFormDialog({
             {newTask.category === 'newCategory' && (
               <Input
                 placeholder="Enter new category"
-                value={newTask.title || ''}
+                value={
+                  newTask.category === 'newCategory' ? '' : newTask.category
+                }
                 onChange={(e) =>
                   setNewTask({ ...newTask, category: e.target.value })
                 }
                 className="mt-2"
               />
+            )}
+            {errors.category && (
+              <p className="text-red-500 text-sm mt-1">{errors.category}</p>
             )}
           </div>
           <div>
@@ -136,6 +236,9 @@ export default function TaskFormDialog({
               onChange={(e) => setNewTask({ ...newTask, due: e.target.value })}
               className="cursor-pointer"
             />
+            {errors.due && (
+              <p className="text-red-500 text-sm mt-1">{errors.due}</p>
+            )}
           </div>
         </div>
 
@@ -143,14 +246,7 @@ export default function TaskFormDialog({
           <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
             Cancel
           </Button>
-          <Button
-            onClick={() => {
-              addTask();
-              setIsDialogOpen(false);
-            }}
-          >
-            Add Task
-          </Button>
+          <Button onClick={handleAddTask}>Add Task</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
