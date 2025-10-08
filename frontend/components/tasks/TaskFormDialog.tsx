@@ -58,8 +58,8 @@ export default function TaskFormDialog({
         break;
 
       case 'description':
-        if (value.length > 1000)
-          message = 'Description cannot exceed 1000 characters.';
+        if (value.length > 600)
+          message = 'Description cannot exceed 600 characters.';
         break;
 
       case 'category':
@@ -133,7 +133,7 @@ export default function TaskFormDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-6">
+        <div className="space-y-6 max-h-[80vh] overflow-y-auto">
           <div className="relative">
             <Label htmlFor="title">Title</Label>
             <Input
@@ -156,22 +156,23 @@ export default function TaskFormDialog({
               id="description"
               value={newTask.description}
               onChange={(e) => {
-                if (e.target.value.length <= 1000) {
+                if (e.target.value.length <= 600) {
                   setNewTask({ ...newTask, description: e.target.value });
                 }
               }}
-              placeholder="Task description (max 1000 characters)"
+              placeholder="Task description (max 600 characters)"
+              className="max-h-40 overflow-y-auto resize-none"
             />
 
             <div className="flex justify-between text-sm mt-1">
               <span
                 className={`${
-                  newTask.description.length > 950
+                  newTask.description.length > 550
                     ? 'text-yellow-600'
                     : 'text-gray-500'
                 }`}
               >
-                {newTask.description.length}/1000
+                {newTask.description.length}/600
               </span>
               {errors.description && (
                 <span className="text-red-500">{errors.description}</span>
