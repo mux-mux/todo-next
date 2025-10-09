@@ -124,7 +124,7 @@ export default function TaskFormDialog({
           <Plus className="h-4 w-4" /> Add Task
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="flex flex-col">
         <DialogHeader>
           <DialogTitle>Add New Task</DialogTitle>
           <DialogDescription>
@@ -133,7 +133,7 @@ export default function TaskFormDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-6 max-h-[80vh]">
+        <div className="flex-1 space-y-6">
           <div className="relative">
             <Label htmlFor="title">Title</Label>
             <Input
@@ -161,7 +161,7 @@ export default function TaskFormDialog({
                 }
               }}
               placeholder="Task description (max 600 characters)"
-              className="max-h-40 overflow-y-auto resize-none"
+              className="max-h-15 overflow-y-auto resize-none"
             />
 
             <div className="flex justify-between text-sm mt-1">

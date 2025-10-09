@@ -26,7 +26,7 @@ export default function TaskCard({
 
   return (
     <Card key={task.id} className="transition-all hover:shadow-md py-4">
-      <CardContent className="px-4">
+      <CardContent className="px-4 overflow-auto">
         <div className="flex items-start gap-4">
           <Checkbox
             checked={task.done}
