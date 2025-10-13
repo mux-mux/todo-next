@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Trash2 } from 'lucide-react';
+import { CalendarClock, ScrollText, Trash2 } from 'lucide-react';
 
 export default function TaskCard({
   task,
@@ -54,22 +54,28 @@ export default function TaskCard({
                 {task.description}
               </p>
             )}
-            <div className="flex items-center justify-between text-sm text-gray-500">
+            <div className="flex items-end justify-between text-sm text-gray-500">
               <span className="grid grid-cols-1 sm:grid-cols-2">
                 {task.category && (
-                  <span className="mr-2">🗒️{task.category}</span>
+                  <div className={`flex items-center gap-1`}>
+                    <ScrollText size={16} />
+                    <span className="mr-2">{task.category}</span>
+                  </div>
                 )}
                 {task.due && (
-                  <span
-                    className={
-                      new Date(task.due).setHours(0, 0, 0, 0) <
-                      new Date().setHours(0, 0, 0, 0)
-                        ? 'text-red-600'
-                        : ''
-                    }
-                  >
-                    📅 {new Date(task.due).toISOString().slice(0, 10)}
-                  </span>
+                  <div className="flex items-center gap-1">
+                    <CalendarClock size={16} />
+                    <span
+                      className={
+                        new Date(task.due).setHours(0, 0, 0, 0) <
+                        new Date().setHours(0, 0, 0, 0)
+                          ? 'text-red-600'
+                          : ''
+                      }
+                    >
+                      {new Date(task.due).toISOString().slice(0, 10)}
+                    </span>
+                  </div>
                 )}
               </span>
               <Button
