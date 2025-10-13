@@ -1,5 +1,5 @@
 import { GlobalError } from '../global-error';
-import TaskList from '@/components/tasks/TaskList';
+import TaskList from '@/components/tasks/TasksList';
 import { getTasks } from '@/app/lib/tasks';
 
 export default async function TasksPage() {
