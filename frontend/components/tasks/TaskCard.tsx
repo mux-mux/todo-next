@@ -1,17 +1,11 @@
 'use client';
 
-import { TasksProps } from '@/types';
+import { TaskCardProps } from '@/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Trash2 } from 'lucide-react';
-
-type TaskCardProps = {
-  task: TasksProps;
-  toggleTaskCompletion: (id: number, done: boolean) => void;
-  removeTask: (id: number) => void;
-};
 
 export default function TaskCard({
   task,

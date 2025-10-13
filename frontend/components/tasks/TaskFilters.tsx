@@ -1,6 +1,6 @@
 'use client';
 
-import { FilterStatus, FilterCategory, TasksProps } from '@/types';
+import { FilterStatus, TaskFiltersProps } from '@/types';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -10,19 +10,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Search } from 'lucide-react';
-
-type TaskFiltersProps = {
-  tasks: TasksProps[];
-  searchTerm: string;
-  setSearchTerm: (value: string) => void;
-  filterStatus: FilterStatus;
-  setFilterStatus: (value: FilterStatus) => void;
-  filterCategory: FilterCategory;
-  setFilterCategory: (value: FilterCategory) => void;
-  sortOrder: 'asc' | 'desc' | 'none';
-  setSortOrder: (value: 'asc' | 'desc' | 'none') => void;
-  children?: React.ReactNode;
-};
 
 export default function TaskFilters({
   tasks,

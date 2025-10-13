@@ -1,8 +1,6 @@
 'use client';
 
-type LoadingProps = {
-  className?: string;
-};
+import { LoadingProps } from '@/types';
 
 export default function Loading({ className }: LoadingProps) {
   return (

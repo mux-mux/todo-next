@@ -1,6 +1,6 @@
 'use client';
 
-type ErrorProps = { title: string | null; error?: string | null };
+import { ErrorProps } from '@/types';
 
 export function GlobalError({ title, error }: ErrorProps) {
   return (

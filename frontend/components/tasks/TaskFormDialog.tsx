@@ -1,6 +1,6 @@
 'use client';
 
-import { NewTaskProps, TasksProps } from '@/types';
+import { NewTaskProps, TaskFormDialogProps, TasksProps } from '@/types';
 import {
   Dialog,
   DialogContent,
@@ -23,13 +23,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
-
-type TaskFormDialogProps = {
-  tasks: TasksProps[];
-  newTask: NewTaskProps;
-  setNewTask: React.Dispatch<React.SetStateAction<NewTaskProps>>;
-  addTask: () => void;
-};
 
 export default function TaskFormDialog({
   tasks,
