@@ -1,6 +1,6 @@
 'use client';
 
-import { NewTaskProps, TaskFormDialogProps, TasksProps } from '@/types';
+import { TaskFormDialogProps } from '@/types';
 import {
   Dialog,
   DialogContent,
