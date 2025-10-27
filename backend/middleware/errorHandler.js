@@ -1,4 +1,4 @@
-export function serverErrorHandler(req, res, next) {
+export function errorHandler(req, res, next) {
   try {
     next();
   } catch (err) {

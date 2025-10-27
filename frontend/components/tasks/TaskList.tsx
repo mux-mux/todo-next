@@ -6,8 +6,6 @@ import TaskFilters from './TaskFilters';
 import TaskFormDialog from './TaskFormDialog';
 import TaskCard from './TaskCard';
 import { Card, CardContent } from '@/components/ui/card';
-import TasksHeader from './TasksHeader';
-import TasksFooter from './TasksFooter';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -98,7 +96,21 @@ export default function TaskList({
   return (
     <div className="min-h-screen rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-100 p-4 md:p-8">
       <div className="mx-auto w-xl">
-        <TasksHeader tasks={tasks} />
+        <header className="mb-8 text-center">
+          <h1 className="text-3xl font-bold text-gray-800 md:text-4xl">
+            Task Manager
+          </h1>
+          <p className="mt-2 text-gray-600">
+            Organize your tasks efficiently.{' '}
+            <span className="inline-block">
+              Progress:{' '}
+              {Math.round(
+                (tasks.filter((t) => t.done).length / tasks.length) * 100
+              )}
+              %
+            </span>
+          </p>
+        </header>
         <main>
           <TaskFilters
             tasks={tasks}
@@ -142,7 +154,15 @@ export default function TaskList({
             )}
           </div>
         </main>
-        <TasksFooter tasks={tasks} />
+
+        <footer className="mt-8 text-center text-sm text-gray-600">
+          {tasks.length > 0 && (
+            <p>
+              {tasks.filter((t) => t.done).length} of {tasks.length} tasks
+              completed
+            </p>
+          )}
+        </footer>
       </div>
     </div>
   );
