@@ -54,7 +54,7 @@ export default function TaskCard({
                 {task.description}
               </p>
             )}
-            <div className="flex items-end justify-between text-sm text-gray-500">
+            <div className="flex justify-between text-sm text-gray-500">
               <span className="grid grid-cols-1 sm:grid-cols-2">
                 {task.category && (
                   <div className={`flex items-center gap-1`}>
